@@ -1,0 +1,29 @@
+<!-- ... الأجزاء الثابتة من الصفحة ... -->
+
+<!-- فورم التواصل -->
+<div class="col-lg-8">
+    <div class="contact_form_container">
+        <form method="post" class="contact_form" id="contact_form">
+            {% csrf_token %}
+            <div class="row">
+                <!-- الاسم -->
+                <div class="col-lg-6 contact_name_col">
+                    {{ form.name }}
+                </div>
+                <!-- البريد -->
+                <div class="col-lg-6">
+                    {{ form.email }}
+                </div>
+            </div>
+            <div>
+                {{ form.subject }}
+            </div>
+            <div>
+                {{ form.message }}
+            </div>
+            <button type="submit" class="contact_button button">ارسال</button>
+        </form>
+    </div>
+</div>
+
+<!-- ... باقي الصفحة ... -->

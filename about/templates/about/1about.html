@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <title>{{ about_content.title }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="header_content d-flex flex-row align-items-center justify-content-start">
+                        <div class="logo">
+                            <a href="#"><img src="{% static 'images/logo.png' %}" alt=""></a>
+                        </div>
+                        <nav class="main_nav">
+                            <ul>
+                                <li><a href="{% url 'home' %}">الرئيسية</a></li>
+                                <li><a href="{% url 'trip_list' %}">الرحلات</a></li>
+                                <li class="active"><a href="{% url 'about' %}">معلومات عنا</a></li>
+                                {% comment %} <li><a href="{% url 'contact' %}">تواصل معنا</a></li> {% endcomment %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="about_content">
+                        <div class="section_title">{{ about_content.title }}</div>
+                        <div class="about_text">
+                            <p>{{ about_content.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    {% if about_content.image %}
+                        <div class="about_image"><img src="{{ about_content.image.url }}" alt="صورة عن الموقع"></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+    <script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+</body>
+</html>

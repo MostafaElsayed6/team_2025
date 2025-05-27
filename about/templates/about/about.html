@@ -1,0 +1,221 @@
+--- START OF FILE about.html ---
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<title>About us</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Bluesky template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/about.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/about_responsive.css' %}">
+</head>
+<body>
+
+<div class="super_container">
+
+		<!-- الرأس -->
+
+		<header class="header">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="header_content d-flex flex-row align-items-center justify-content-start">
+							<div class="logo">
+								<a href="#"><img src="{% static 'images/logo.png' %}" alt=""></a>
+							</div>
+							<nav class="main_nav">
+								<ul>
+									<li ><a href="{%url 'Trip'%}">الرئيسية</a></li>
+									<li><a href="{%url 'trips_list'%}">الرحلات</a></li>
+									<li><a href="{%url 'about'%}">معلومات عنا</a></li>
+									<li><a href="{%url 'contact'%}">تواصل معنا</a></li>
+								</ul>
+							</nav>
+							<div class="phone_num ml-auto">
+								<div class="phone_num_inner">
+									<img src="{% static 'images/phone.png' %}" alt=""><span>+20 127 587 9601</span>
+								</div>
+							</div>
+							<div class="hamburger ml-auto"><i class="fa fa-bars" aria-hidden="true"></i></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<!-- القائمة -->
+
+		<div class="menu trans_500">
+			<div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
+				<div class="menu_close_container">
+					<div class="menu_close"></div>
+				</div>
+				<div class="logo menu_logo">
+					<a href="#">
+						<div class="logo_container d-flex flex-row align-items-start justify-content-start">
+							<div class="logo_image">
+								<div><img src="{% static 'images/logo.png' %}" alt=""></div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<ul>
+					<li ><a href="{%url 'Trip'%}">الرئيسية</a></li>
+					<li><a href="{%url 'trips_list'%}">الرحلات</a></li>
+					<li><a href="{%url 'about'%}">معلومات عنا</a></li>
+					<li><a href="{%url 'contact'%}">تواصل معنا</a></li>
+				</ul>
+			</div>
+			<div class="menu_phone"><span>call us: </span>+20 127 587 9601</div>
+		</div>
+
+		<!-- الرئيسية -->
+
+	<div class="home">
+		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{% static 'images/contact.jpg' %}" data-speed="0.8"></div>
+		<div class="home_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="home_content d-flex flex-row align-items-end justify-content-start">
+							<div class="home_title">{{ about_content.title }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- About -->
+
+	<div class="about">
+		<div class="container">
+			<div class="row">
+
+				<!-- About Content -->
+				<div class="col-lg-6">
+					<div class="about_content">
+						<div class="section_title">بعض المعلومات عنا</div>
+						<div class="about_text">
+							<p>نحن فريق برمجة وتصميم محترف لأنشاء وتصميم وصيانة مواقع الويب والحلول الرقمية</p>
+							<p>{{ about_content.description }}</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- About Image -->
+				<div class="col-lg-6">
+					<div class="about_image">
+                        {% if about_content.image %}
+                            <img src="{{ about_content.image.url }}" alt="{{ about_content.title }}">
+                        {% else %}
+                            <img src="{% static 'images/prog.png' %}" alt="">
+                        {% endif %}
+                    </div>
+				</div>
+			</div>
+        </div>
+	</div>
+
+    <!-- Realtors (Team Members) -->
+	<div class="realtors">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="section_title">المشاركين في بناء المشروع</div>
+					<div class="section_subtitle">مجموعة من المبرمجين والمصممين</div>
+				</div>
+			</div>
+			<div class="row realtors_row">
+				{% for member in team_members %}
+				<div class="col-lg-3 col-md-6">
+					<div class="realtor_outer">
+						<div class="realtor">
+							<div class="realtor_image">
+								<img src="{{ member.image.url }}" alt="{{ member.name }}">
+							</div>
+							<div class="realtor_body">
+								<div class="realtor_title">{{ member.name }}</div>
+								<div class="realtor_subtitle">{{ member.role }}</div>
+							</div>
+							{% if member.phone %}
+							<div class="realtor_link">
+								<a href="tel:{{ member.phone }}">✆</a>
+							</div>
+							{% endif %}
+						</div>
+						<div class="realtor_link_background_container">
+							<div><div class="realtor_link_background"></div></div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+    
+
+		<!-- التزييل 1 -->
+
+		<div class="newsletter">
+			<div class="parallax_background parallax-window" data-parallax="scroll"
+				data-image-src="{% static 'images/first_footer.jpg' %}" data-speed="0.8"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div
+							class="newsletter_content d-flex flex-lg-row flex-column align-items-start justify-content-start">
+							<div class="newsletter_title_container">
+								<div class="newsletter_title">اكتشف جمال المياه وسحر الطبيعة في
+									أروع وجهات مصر.</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- التزييل -->
+
+
+		<div class="footer_bar">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="footer_bar_content d-flex flex-row align-items-center justify-content-start">
+							<div class="cr">
+								Copyright ©
+								<script>document.write(new Date().getFullYear());</script> All rights
+								reserved | KMA
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</footer>
+	</div>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/TimelineMax.min.js' %}"></script>
+<script src="{% static 'plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/animation.gsap.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/ScrollToPlugin.min.js' %}"></script>
+<script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
+<script src="{% static 'plugins/easing/easing.js' %}"></script>
+<script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="{% static 'js/about.js' %}"></script>
+</body>
+</html>
+--- END OF FILE about.html ---

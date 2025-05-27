@@ -1,0 +1,185 @@
+
+{%load static%}
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <title>Collecting Data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}"> <!-n->
+    <style>
+        /* Styling for the message box */
+        #responseMessage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            width: 80%;
+            text-align: center;
+        }
+
+        /* Additional styling to make the message box look better */
+        .alert {
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body class="container">
+
+
+    <form class="container" id="contactForm" method="post">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-body">
+
+                <h2 class="text-primary">ارسال نموذج حجز رحلة</h2>
+                <!-- User Data Fields -->
+                <div class="form-group">
+                    <label for="nameField">اسم المستخدم ثلاثي</label>
+                    <input type="text" class="form-control" id="nameField" name="nameField" placeholder="ادخل اسمك" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="emailField">البريد الاليكتروني</label>
+                    <input type="email" class="form-control" id="emailField" name ="emailField" placeholder="name@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneField">هاتف المستخدم</label>
+                    <input type="number" class="form-control" id="phoneField" name="phoneField" placeholder="ادخل رقم هاتفك" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="addressField">العنوان</label>
+                    <input type="text" class="form-control" id="addressField" name="addressField" placeholder="ادخل عنوانك" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateTimeField">وقت وتاريخ الرحلة</label>
+                    <input type="datetime-local" class="form-control" id="dateTimeField" name="dateTimeField" required>
+                </div>
+
+                <!-- Static Trip Information (Dynamic Data from Django Model) -->
+                <h4 class="data">معلومات الرحلة</h4>
+
+                <div class="form-group">
+                    <label>اسم الرحلة :</label><p id="trip-name">{{ trip.title }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label>موقع الرحلة :</label><p id="trip-location">{{ trip.location }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label>هاتف المسؤول :</label><p id="trip-phone">{{ trip.responsible_phone }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label>التفاصيل :</label><p id="trip-details">{{ trip.description }}</p>
+                </div>
+
+            </div>
+            <div class="butt">
+                <button type="submit" class="button" style="margin: 25px;" id="submitButton">
+                    تأكيد الارسال
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Message to user after submission -->
+    <div id="responseMessage" class="alert alert-success" style="display: none;"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/3.7.4/firebase.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBWC-JdelmmD48bJdhny0pECiO1zHY-uZ0",
+            authDomain: "watertrips2.firebaseapp.com",
+            databaseURL: "https://watertrips2-default-rtdb.firebaseio.com",
+            projectId: "watertrips2",
+            storageBucket: "watertrips2.firebasestorage.app",
+            messagingSenderId: "967509042306",
+            appId: "1:967509042306:web:c1c5be0d034ec17bcec09b",
+            measurementId: "G-LENBJERJEY"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        let messagesRef = firebase.database().ref('booking-operations');
+
+        document.getElementById('contactForm').addEventListener('submit', submitForm);
+
+
+        function submitForm(e) {
+            e.preventDefault();
+
+            // Get user data
+            let name = getInputVal('nameField'); // استخدم الـ ID الجديد
+            let email = getInputVal('emailField'); // استخدم الـ ID الجديد
+            let phone = getInputVal('phoneField'); // استخدم الـ ID الجديد
+            let address = getInputVal('addressField'); // استخدم الـ ID الجديد
+            let dateTime = getInputVal('dateTimeField'); // استخدم الـ ID الجديد
+
+            // Get trip data from HTML elements (now populated by Django)
+            let tripName = document.getElementById('trip-name').innerText;
+            let tripLocation = document.getElementById('trip-location').innerText;
+            let tripPhone = document.getElementById('trip-phone').innerText;
+            let tripDetails = document.getElementById('trip-details').innerText;
+
+
+            // Disable the submit button to prevent multiple submissions
+            document.getElementById('submitButton').disabled = true;
+
+            // Save data to Firebase
+            saveBookingData(name, email, phone, address, dateTime, tripName, tripLocation, tripPhone, tripDetails);
+
+            // Display success message
+            document.getElementById('responseMessage').innerHTML = `
+                شكراً لك, ${name}! تم ارسال نموذج الحجز بنجاح.
+            `;
+            document.getElementById('responseMessage').style.display = 'block';
+
+          //  Clear the form after submission
+            document.getElementById('contactForm').reset();
+
+           //  Redirect to the previous page after a short delay (3 seconds)
+            setTimeout(function() {
+                window.location.href ="{% url 'trips_list' %}";  //Redirect to trips list page
+            }, 3000);
+        }
+
+        // Function to get input values
+        function getInputVal(id) {
+            return document.getElementById(id).value;
+        }
+
+        // Function to save booking data to Firebase
+        function saveBookingData(name, email, phone, address, dateTime, tripName, tripLocation, tripPhone, tripDetails) {
+            let newBookingRef = messagesRef.push();
+            newBookingRef.set({
+                user: {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    dateTime: dateTime
+                },
+                trip: {
+                    name: tripName,
+                    location: tripLocation,
+                    phone: tripPhone,
+                    details: tripDetails
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

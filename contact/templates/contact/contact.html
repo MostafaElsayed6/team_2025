@@ -1,0 +1,205 @@
+--- START OF FILE contact.html ---
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<title>Contact</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Bluesky template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/rangeslider.js-2.3.0/rangeslider.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/contact.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/contact_responsive.css' %}">
+</head>
+<body>
+
+<div class="super_container">
+
+		<!-- الرأس -->
+
+		<header class="header">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="header_content d-flex flex-row align-items-center justify-content-start">
+							<div class="logo">
+								<a href="#"><img src="{% static 'images/logo.png' %}" alt=""></a>
+							</div>
+							<nav class="main_nav">
+								<ul>
+									<li ><a href="{%url 'Trip'%}">الرئيسية</a></li>
+									<li><a href="{%url 'trips_list'%}">الرحلات</a></li>
+									<li><a href="{%url 'about'%}">معلومات عنا</a></li>
+									<li><a href="{%url 'contact'%}">تواصل معنا</a></li>
+								</ul>
+							</nav>
+							<div class="phone_num ml-auto">
+								<div class="phone_num_inner">
+									<img src="{% static 'images/phone.png' %}" alt=""><span>+20 127 587 9601</span>
+								</div>
+							</div>
+							<div class="hamburger ml-auto"><i class="fa fa-bars" aria-hidden="true"></i></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<!-- القائمة -->
+
+		<div class="menu trans_500">
+			<div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
+				<div class="menu_close_container">
+					<div class="menu_close"></div>
+				</div>
+				<div class="logo menu_logo">
+					<a href="#">
+						<div class="logo_container d-flex flex-row align-items-start justify-content-start">
+							<div class="logo_image">
+								<div><img src="{% static 'images/logo.png' %}" alt=""></div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<ul>
+					<li ><a href="{%url 'Trip'%}">الرئيسية</a></li>
+					<li><a href="{%url 'trips_list'%}">الرحلات</a></li>
+					<li><a href="{%url 'about'%}">معلومات عنا</a></li>
+					<li><a href="{%url 'contact'%}">تواصل معنا</a></li>
+				</ul>
+			</div>
+			<div class="menu_phone"><span>call us: </span>+20 127 587 9601</div>
+		</div>
+
+		<!-- الرئيسية -->
+
+	<div class="home">
+		<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="{% static 'images/contact.jpg' %}" data-speed="0.8"></div>
+		<div class="home_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="home_content d-flex flex-row align-items-end justify-content-start">
+							<div class="home_title">تواصل معنا</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- التواصل -->
+
+	<div class="contact">
+		<div class="container">
+			<div class="row">
+
+				<!-- معلومات التواصل -->
+				<div class="col-lg-4">
+					<div class="contact_info">
+						<div class="section_title">كن على اتصال معنا</div>
+						<div class="contact_info_text"><p>watertrips</p></div>
+						<p>هو مشروع موقع اليكتروني لتنشيط السياحة في مصر عبر عرض الرحلات المائية واماكن المصايف داخل مصر</p>
+						<div class="contact_info_content">
+							<ul class="contact_info_list">
+								<li>
+									<div>العنوان :</div>
+									<div>مصر / الاسكندرية / الكينج مريوط</div>
+								</li>
+								<li>
+									<div>الهاتف :</div>
+									<div>+20 127 587 9601</div>
+								</li>
+								<li>
+									<div>البريد الاليكتروني :</div>
+									<div>Egyptwater16@gmail.com</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<!-- فورم التواصل -->
+				<div class="col-lg-8">
+					<div class="contact_form_container">
+						<form method="post" action="#" class="contact_form" id="contact_form">
+                            {% csrf_token %}
+							<div class="row">
+								<!-- الاسم -->
+								<div class="col-lg-6 contact_name_col">
+									<input type="text" class="contact_input" name="name" placeholder="الاسم" required="required">
+								</div>
+								<!-- الحساب -->
+								<div class="col-lg-6">
+									<input type="email" class="contact_input" name = "email" placeholder="البريد الاليكتروني" required="required">
+								</div>
+							</div>
+							<div><input type="text" class="contact_input" name ="adres" placeholder="عنوان الرسالة"></div>
+							<div><textarea class="contact_textarea contact_input" name = "massage" placeholder="الرسالة" required="required"></textarea></div>
+							 
+							<button class="contact_button button">ارسال</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+		<!-- التزييل 1 -->
+
+		<div class="newsletter">
+			<div class="parallax_background parallax-window" data-parallax="scroll"
+				data-image-src="{% static 'images/first_footer.jpg' %}" data-speed="0.8"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div
+							class="newsletter_content d-flex flex-lg-row flex-column align-items-start justify-content-start">
+							<div class="newsletter_title_container">
+								<div class="newsletter_title">اكتشف جمال المياه وسحر الطبيعة في
+									أروع وجهات مصر.</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- التزييل -->
+
+
+		<div class="footer_bar">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="footer_bar_content d-flex flex-row align-items-center justify-content-start">
+							<div class="cr">
+								Copyright ©
+								<script>document.write(new Date().getFullYear());</script> All rights
+								reserved | KMA
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</footer>
+	</div>
+</div>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/easing/easing.js' %}"></script>
+<script src="{% static 'plugins/rangeslider.js-2.3.0/rangeslider.min.js' %}"></script>
+<script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA"></script>
+<script src="{% static 'js/contact.js' %}"></script>
+</body>
+</html>

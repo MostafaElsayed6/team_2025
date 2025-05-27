@@ -1,0 +1,149 @@
+--- START OF FILE form_page.html ---
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Collecting Data</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}"> <!- تم تعديل هذا السطر ->
+    <style>
+        /* Styling for the message box */
+        #responseMessage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            width: 80%;
+            text-align: center;
+        }
+
+        /* Additional styling to make the message box look better */
+        .alert {
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body class="container">
+
+    <form class="container" id="contactForm" method="post" action="{% url 'save_to_database' %}">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-primary">ارسال نموذج حجز رحلة</h2>
+                <!-- User Data Fields -->
+                <div class="form-group">
+                    <label for="name">اسم المستخدم ثلاثي</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="ادخل اسمك" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">البريد الاليكتروني</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">هاتف المستخدم</label>
+                    <input type="number" class="form-control" id="phone" name="phone" placeholder="ادخل رقم هاتفك" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">العنوان</label>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="ادخل عنوانك" required>
+                </div>
+
+                {% comment %} <div class="form-group">
+                    <label for="date-time">وقت وتاريخ الرحلة</label>
+                    <input type="datetime-local" class="form-control" id="date-time" name="trip_datetime" required>
+                </div> {% endcomment %}
+
+                <!-- Static Trip Information (Dynamic Data from Django Model) -->
+                <h4 class="data">معلومات الرحلة</h4>
+
+                <div class="form-group">
+                    <label>اسم الرحلة :</label><p id="trip-name">{{ trip.title }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label>موقع الرحلة :</label><p id="trip-location">{{ trip.location }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label>هاتف المسؤول :</label><p id="trip-phone">{{ trip.responsible_phone }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label>التفاصيل :</label><p id="trip-details">{{ trip.description }}</p>
+                </div>
+
+            </div>
+            <div class="butt">
+                <button type="submit" class="button" style="margin: 25px;" id="submitButton">
+                    تأكيد الارسال
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Message to user after submission -->
+    <div id="responseMessage" class="alert alert-success" style="display: none;"></div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', submitForm);
+
+        function submitForm(e) {
+            e.preventDefault();
+
+            // Disable the submit button to prevent multiple submissions
+            document.getElementById('submitButton').disabled = true;
+
+            // Get form data
+            var formData = new FormData(document.getElementById('contactForm'));
+
+            // Send data to Django view using AJAX
+            $.ajax({
+                url: "{% url 'save_to_database' %}", // URL for your Django view
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Display success message
+                    document.getElementById('responseMessage').innerHTML = `
+                        شكراً لك, ${formData.get('name')}! تم ارسال نموذج الحجز بنجاح. ${response}
+                    `;
+                    document.getElementById('responseMessage').style.display = 'block';
+
+                    // Clear the form after submission (optional as page redirect)
+                    document.getElementById('contactForm').reset();
+
+                    // Redirect to the previous page after a short delay (3 seconds)
+                    setTimeout(function() {
+                        window.location.href = "{% url 'trips_list' %}"; // Redirect to trips list page
+                    }, 3000);
+                },
+                error: function(xhr, status, error) {
+                    // Enable the submit button in case of error
+                    document.getElementById('submitButton').disabled = false;
+                    // Display error message
+                    document.getElementById('responseMessage').innerHTML = `
+                        حدث خطأ أثناء الارسال. يرجى المحاولة مرة أخرى. ${error}
+                    `;
+                    document.getElementById('responseMessage').classList.remove('alert-success');
+                    document.getElementById('responseMessage').classList.add('alert-danger');
+                    document.getElementById('responseMessage').style.display = 'block';
+                }
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

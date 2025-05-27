@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تم الإرسال بنجاح</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .success-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border: 2px solid #4CAF50;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            opacity: 0.1;
+            z-index: -1;
+            transform: rotate(45deg);
+        }
+
+        .success-card h4 {
+            color: #2E7D32;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .success-card p {
+            color: #424242;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: scaleUp 0.5s ease-in-out;
+        }
+
+        .checkmark::after {
+            content: '\2713';
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        @keyframes scaleUp {
+            0% {
+                transform: scale(0);
+            }
+            80% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .success-card {
+                padding: 30px 20px;
+            }
+            
+            .success-card h4 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-card">
+        <div class="checkmark"></div>
+        <h4>تم إرسال رسالتك بنجاح!</h4>
+        <p>سيقوم فريقنا بالرد عليك في خلال 24 ساعة. شكراً لثقتك بنا!</p>
+    </div>
+    <script>
+    
+
+        //  Redirect to the previous page after a short delay (3 seconds)
+         setTimeout(function() {
+             window.location.href ="{% url 'trips_list' %}";  //Redirect to trips list page
+         }, 3000);
+     
+ 
+     // Function to get input values
+     
+ </script>
+</body>
+</html>
+

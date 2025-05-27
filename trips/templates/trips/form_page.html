@@ -1,0 +1,168 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"> <!-- تعديل للغة العربية والاتجاه -->
+
+<head>
+    <meta charset="UTF-8">
+    <title>حجز رحلة: {{ trip.title }}</title> <!-- عنوان أوضح -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- استخدام نسخة Bootstrap تدعم RTL أو إضافة ملف CSS لـ RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-v4-rtl/dist/css/bootstrap-rtl.min.css"> --> <!-- مثال لـ Bootstrap RTL -->
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}">
+    <style>
+        /* Styling for Django message box */
+        .django-messages {
+            position: fixed;
+            top: 20px; /* تعديل الموضع */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            width: 80%; /* أو عرض مناسب */
+            max-width: 600px;
+            text-align: center;
+        }
+        .card {
+            margin-top: 80px; /* إضافة مسافة علوية لتجنب تداخل الرسائل */
+        }
+        label {
+            font-weight: bold; /* جعل العناوين أوضح */
+        }
+        .data label { display: inline-block; margin-left: 5px;} /* تحسين عرض بيانات الرحلة */
+        .data p { display: inline;}
+        .form-control:invalid {
+             border-color: #dc3545; /* لون أحمر للحقول غير الصالحة (بسبب required) */
+        }
+    </style>
+</head>
+
+<body class="container">
+
+    <!-- منطقة عرض رسائل Django -->
+    {% if messages %}
+    <div class="django-messages">
+        {% for message in messages %}
+        <!-- تم تحسين عرض الألوان للرسائل المختلفة -->
+        <div class="alert {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}alert-danger{% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}alert-warning{% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}alert-success{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- النموذج يرسل الآن إلى مسار Django الصحيح -->
+    <!-- استخدم novalidate لمنع التحقق الافتراضي للمتصفح والاعتماد على تحقق Django ورسائله -->
+    <form class="container" id="contactForm" method="post" action="{% url 'trip_form' trip.id %}" novalidate>
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-body">
+
+                <h2 class="text-primary">ارسال نموذج حجز رحلة</h2>
+                <hr>
+                <!-- حقول بيانات المستخدم -->
+                <h4 class="mt-3">بيانات المستخدم</h4>
+                <div class="form-group">
+                    <label for="nameField">الاسم الثلاثي <span class="text-danger">*</span></label> <!-- علامة للإشارة للحقول المطلوبة -->
+                    <input type="text" class="form-control" id="nameField" name="nameField" placeholder="ادخل اسمك الكامل" required value="{{ request.POST.nameField | default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="emailField">البريد الالكتروني <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="emailField" name="emailField" placeholder="name@example.com" required value="{{ request.POST.emailField | default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneField">رقم الهاتف <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" id="phoneField" name="phoneField" placeholder="مثال: 05xxxxxxxx" required pattern="[0-9+ ]{7,}" title="أدخل رقم هاتف صحيح" value="{{ request.POST.phoneField | default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="addressField">العنوان <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="addressField" name="addressField" placeholder="ادخل عنوانك" required value="{{ request.POST.addressField | default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="dateTimeField">التاريخ والوقت المطلوب للرحلة <span class="text-danger">*</span></label>
+                    <input type="datetime-local" class="form-control" id="dateTimeField" name="dateTimeField" required value="{{ request.POST.dateTimeField | default:'' }}" min="{{ trip.date|date:'Y-m-d\TH:i' }}"> <!-- (اختياري) منع اختيار تاريخ قبل تاريخ الرحلة الأساسي إن وجد -->
+                </div>
+
+                <!-- معلومات الرحلة الثابتة (تُملأ من Django context) -->
+                <h4 class="data mt-4">معلومات الرحلة المحجوزة</h4>
+
+                <div class="form-group data">
+                    <label>اسم الرحلة:</label><p id="trip-name">{{ trip.title }}</p>
+                </div>
+
+                <div class="form-group data">
+                    <label>موقع الرحلة:</label><p id="trip-location">{{ trip.location }}</p>
+                </div>
+
+                <div class="form-group data">
+                    <label>هاتف المسؤول:</label><p id="trip-phone">{{ trip.responsible_phone }}</p>
+                </div>
+
+                <div class="form-group data">
+                    <label>التفاصيل:</label><p id="trip-details" style="white-space: pre-wrap;">{{ trip.description }}</p> <!-- للحفاظ على تنسيق النص -->
+                </div>
+                 <div class="form-group data">
+                    <label>السعر:</label><p>{{ trip.price }}</p> <!-- عرض السعر -->
+                </div>
+                 <div class="form-group data">
+                    <label>المدة:</label><p>{{ trip.duration }}</p> <!-- عرض المدة -->
+                </div>
+
+            </div>
+            <div class="butt text-center"> <!-- توسيط الزر -->
+                <button type="submit" class="btn btn-primary btn-lg" style="margin: 25px;" id="submitButton">
+                    تأكيد الحجز
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- تم إزالة الجافاسكربت الخاصة بـ Firebase -->
+
+    <script>
+        // جافاسكربت اختيارية لتحسين تجربة المستخدم
+
+        // 1. تعطيل الزر عند الإرسال لمنع الإرسال المزدوج
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            // يمكنك إضافة تحقق بسيط هنا بالجافاسكربت قبل التعطيل إذا أردت
+            if (this.checkValidity()) { // تحقق من صحة الحقول المطلوبة (required, pattern, etc.)
+                const submitButton = document.getElementById('submitButton');
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جارٍ الارسال...';
+            } else {
+                // إذا كانت هناك أخطاء تحقق في المتصفح، لا تعطل الزر للسماح للمستخدم بالتصحيح
+                // المتصفح سيظهر رسائل الخطأ الافتراضية (ما لم نستخدم novalidate ونعتمد كليا على Django)
+                // إذا استخدمت novalidate في الفورم، ستحتاج لإظهار الأخطاء بنفسك هنا أو الاعتماد على رسائل Django عند إعادة التحميل
+                 console.log("Form is invalid. Preventing disabling submit button.");
+            }
+        });
+
+        // 2. (اختياري) إخفاء رسائل Django تلقائيًا بعد فترة
+         $(document).ready(function() {
+             // تأكد من تضمين Bootstrap JS أدناه لهذا الغرض
+             window.setTimeout(function() {
+                 $(".django-messages .alert").fadeTo(500, 0).slideUp(500, function(){
+                     $(this).closest('.django-messages').remove(); // إزالة الحاوية كلها إذا كانت فارغة
+                 });
+             }, 7000); // 7 ثوانٍ
+
+            // تأكد من عمل زر الإغلاق في رسائل Bootstrap
+            $('.django-messages .alert .close').on('click', function(e) {
+                 $(this).closest('.alert').fadeTo(500, 0).slideUp(500);
+            });
+         });
+    </script>
+
+    <!-- تضمين Bootstrap JS (ضروري لـ alert dismissal وبعض وظائف التحقق إذا لم تستخدم novalidate) -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

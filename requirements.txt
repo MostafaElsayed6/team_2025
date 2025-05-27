@@ -1,0 +1,14 @@
+asgiref==3.8.1
+distlib==0.3.9
+Django==5.1.7
+django-suit @ https://github.com/darklow/django-suit/tarball/v2#sha256=87ef7f5182d81b6f204e9a7fefab86d92f985a62b15901178168046a2252bd59
+filelock==3.18.0
+mysql==0.0.3
+mysql-connector==2.2.9
+mysql-connector-python==9.2.0
+mysqlclient==2.2.7
+pillow==11.1.0
+platformdirs==4.3.6
+sqlparse==0.5.3
+tzdata==2025.1
+virtualenv==20.29.3
