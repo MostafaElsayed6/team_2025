@@ -1,0 +1,54 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- وصف الصفحه -->
+     <meta name="description" content="اكتشف أفضل الأفلام والمسلسلات في جميع الأنواع مثل الأكشن، الدراما، الكوميديا، والرعب. استمتع بمشاهدة أحدث العروض، تقييمات المستخدمين، والمحتوى الحصري على موقعنا. شاهد الآن بجودة عالية وبأفضل تجربة ترفيهية!">
+    <!-- file css -->
+     <link rel="stylesheet" href="{% static 'styles/log-in.css' %}">
+     <!-- link font -->
+     <link href="https://fonts.googleapis.com/css2?family=Abel&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+     <!-- link icons -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <title>Document</title>
+</head>
+<!-- بدايه الصفحه -->
+<body>
+    <!-- قسم المشرف -->
+    <div class="admin-register">
+        <!-- شعار الموقع -->
+        <div class="img-logo-a">
+            <img src="{% static 'images/img-sub/Rectangle 26.png' %}" alt="">
+        </div>
+        <div class="text-user">
+            <h1>Welcome to 8ight</h1>
+        </div>
+        <!-- نموذج دخول المشرف -->
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            
+            <div class="inputs-admin">
+                <div class="admin-log">
+                    <input type="text" name="username" placeholder="اسم المستخدم" required>
+                    <!-- <input type="text" name="adminName" id="adminName" placeholder="Admin Name"> -->
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="admin-log">
+                    <input type="password" name="password" placeholder="كلمة المرور" required>
+                    <!-- <input type="password" name="password Admin" id="passwordAdmin" placeholder="Password"> -->
+                    <i class="fa-solid fa-eye-slash" id="showAd"></i>
+                </div>
+            </div>
+            <button type="submit" class="btn-reg-admin">Register</button>
+        </form>
+        <p>ليس لديك حساب؟ <a href="{% url 'signup' %}">سجل هنا</a></p>
+       </div>
+    </div>
+
+     <!-- file javascript -->
+    <script src="{% static 'log-in.js' %}"></script>
+</body>
+</html>

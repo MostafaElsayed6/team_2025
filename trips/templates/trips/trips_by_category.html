@@ -132,8 +132,8 @@
 								<div class="property_title">
 									<!-- Dynamic Title and Placeholder Link (Adjust href as needed) -->
 									<!-- If you have a detail page URL for each trip, use it here e.g., href="{{ trip.get_absolute_url }}" or similar -->
-									<a href="#"> <!-- Consider how to link to details or booking -->
-										{{ trip.title }}
+									<a href="{% url 'trip_form' trip.id %}">{{ trip.title }}</a><!-- Consider how to link to details or booking -->
+										
 									</a>
 								</div>
 								<!-- Dynamic Price -->

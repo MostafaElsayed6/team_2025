@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب - Eight</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 450px;
+            transition: 0.3s all ease;
+        }
+
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 1.8rem;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        form p {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a4a4a;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: 0.3s border-color ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.9rem;
+            background: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s background ease;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background: #166fe5;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #4a4a4a;
+        }
+
+        .login-link a {
+            color: #1877f2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* تنسيق الأخطاء والرسائل */
+        .errorlist {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            list-style: none;
+            padding: 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h1>أنشئ حسابك المجاني</h1>
+        <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">إنشاء حساب جديد</button>
+        </form>
+        <p class="login-link">لديك حساب؟ <a href="{% url 'login' %}">سجل الدخول الآن</a></p>
+    </div>
+</body>
+</html>
